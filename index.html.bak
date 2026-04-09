@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20道題，測出你的工作 MBTI｜經理人</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #faf7f2;
+    --accent: #c0392b;
+    --gold: #d4a017;
+    --muted: #7a7060;
+    --card-bg: #ffffff;
+    --border: #e8e0d0;
+    --e-color: #2980b9;
+    --s-color: #27ae60;
+    --t-color: #8e44ad;
+    --j-color: #c0392b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* PAGE 1 INTRO */
+  .hero {
+    padding: 48px 0 40px;
+    text-align: center;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 40px;
+  }
+
+  .hero-label {
+    font-size: 11px; letter-spacing: 5px; color: var(--accent);
+    margin-bottom: 14px; display: block; font-weight: 700;
+  }
+
+  .hero h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(24px, 5vw, 42px);
+    font-weight: 900; line-height: 1.2; margin-bottom: 8px;
+  }
+
+  .hero-sub {
+    font-size: 13px; color: var(--muted); letter-spacing: 2px; margin-bottom: 28px;
+  }
+
+  .tips-box {
+    text-align: left; max-width: 520px; margin: 0 auto 32px;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-left: 3px solid var(--gold); padding: 16px 20px; border-radius: 2px;
+  }
+
+  .tips-box p { font-size: 13px; color: var(--muted); line-height: 1.75; }
+  .tips-box p + p { margin-top: 6px; }
+  .tips-box p::before { content: '· '; color: var(--gold); font-weight: 700; }
+
+  .btn-primary {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px; font-weight: 700; letter-spacing: 4px;
+    color: var(--paper); background: var(--ink);
+    border: none; padding: 16px 48px; cursor: pointer;
+    transition: background 0.2s; display: inline-block;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--accent); }
+
+  /* PAGE 2 QUIZ */
+  .progress-wrap {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(250,247,242,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border); padding: 10px 0; margin-bottom: 32px;
+  }
+
+  .progress-inner {
+    max-width: 800px; margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .progress-text { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+  .progress-bar-bg {
+    flex: 1; height: 4px; background: var(--border);
+    border-radius: 2px; overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%; background: var(--accent);
+    border-radius: 2px; transition: width 0.35s ease; width: 0%;
+  }
+
+  .progress-pct {
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    min-width: 34px; text-align: right;
+  }
+
+  .section-label {
+    font-size: 11px; letter-spacing: 4px; color: var(--muted);
+    border-top: 1px solid var(--border); padding-top: 28px;
+    margin: 28px 0 20px; font-weight: 700;
+  }
+
+  .question-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 4px; margin-bottom: 16px; overflow: hidden;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .question-card.answered {
+    border-color: var(--ink); box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .question-header {
+    display: flex; gap: 14px; padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border); align-items: flex-start;
+  }
+
+  .question-num {
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    letter-spacing: 2px; white-space: nowrap; margin-top: 3px;
+  }
+
+  .question-text {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px; font-weight: 700; line-height: 1.65;
+  }
+
+  .options { padding: 4px 0; }
+
+  .option-label {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 13px 20px; cursor: pointer; transition: background 0.15s;
+  }
+  .option-label:hover { background: #f5f0e8; }
+  .option-label input[type="radio"] { display: none; }
+
+  .option-marker {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--border); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; margin-top: 1px;
+  }
+
+  .option-marker::after {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); opacity: 0; transform: scale(0); transition: all 0.2s;
+  }
+
+  .option-label input:checked + .option-marker { border-color: var(--accent); background: #fdf0ee; }
+  .option-label input:checked + .option-marker::after { opacity: 1; transform: scale(1); }
+
+  .option-badge {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    letter-spacing: 1px; margin-top: 2px; min-width: 12px;
+  }
+  .option-label.selected .option-badge { color: var(--accent); }
+
+  .option-text { font-size: 14px; line-height: 1.75; color: #3a3530; }
+  .option-label.selected .option-text { color: var(--ink); font-weight: 500; }
+
+  .option-divider { height: 1px; background: var(--border); margin: 0 20px; opacity: 0.5; }
+
+  .submit-section { padding: 36px 0 60px; text-align: center; }
+
+  .submit-warning {
+    font-size: 13px; color: var(--accent); margin-bottom: 16px; display: none;
+  }
+  .submit-warning.visible { display: block; }
+
+  /* PAGE 3 RESULT */
+  .result-hero {
+    text-align: center; padding: 48px 0 36px;
+    border-bottom: 2px solid var(--ink); margin-bottom: 36px;
+  }
+
+  .result-eyebrow {
+    font-size: 11px; letter-spacing: 5px; color: var(--muted);
+    margin-bottom: 16px; display: block; font-weight: 700;
+  }
+
+  .result-type-wrap {
+    position: relative; display: inline-block;
+    margin-bottom: 14px; line-height: 1;
+  }
+
+  .result-type-main {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(72px, 18vw, 120px);
+    font-weight: 900; letter-spacing: 6px;
+    color: var(--ink); position: relative; z-index: 1;
+    display: block;
+  }
+
+  .result-type-shadow {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(72px, 18vw, 120px);
+    font-weight: 900; letter-spacing: 6px;
+    color: var(--accent); position: absolute;
+    top: 4px; left: 4px; z-index: 0;
+    display: block;
+  }
+
+  .result-name {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--muted); letter-spacing: 4px; margin-top: 6px;
+  }
+
+  .score-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px;
+  }
+  @media(max-width:560px) { .score-grid { grid-template-columns: 1fr; } }
+
+  .score-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 18px 20px; position: relative; overflow: hidden;
+  }
+
+  .score-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .score-card.ei::before { background: var(--e-color); }
+  .score-card.sn::before { background: var(--s-color); }
+  .score-card.tf::before { background: var(--t-color); }
+  .score-card.jp::before { background: var(--j-color); }
+
+  .score-card-title {
+    font-size: 11px; letter-spacing: 3px; color: var(--muted); margin-bottom: 14px; font-weight: 700;
+  }
+
+  .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+
+  .score-ltr {
+    font-family: 'Noto Serif TC', serif; font-size: 26px; font-weight: 900; min-width: 28px;
+  }
+  .score-ltr.win  { color: var(--ink); }
+  .score-ltr.lose { color: var(--border); }
+
+  .bar-bg { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+
+  .bar-fill { height: 100%; border-radius: 3px; width: 0; transition: width 1s ease 0.3s; }
+  .score-card.ei .bar-fill { background: var(--e-color); }
+  .score-card.sn .bar-fill { background: var(--s-color); }
+  .score-card.tf .bar-fill { background: var(--t-color); }
+  .score-card.jp .bar-fill { background: var(--j-color); }
+
+  .score-count { font-size: 12px; color: var(--muted); text-align: right; }
+
+  .desc-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-left: 4px solid var(--ink); border-radius: 0 4px 4px 0;
+    padding: 22px 26px; margin-bottom: 28px;
+  }
+
+  .desc-card h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 16px; font-weight: 700; margin-bottom: 10px;
+  }
+
+  .desc-card p { font-size: 14px; line-height: 1.9; color: #4a4030; }
+
+  .result-actions { text-align: center; padding-bottom: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+  .btn-outline {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 13px; letter-spacing: 3px;
+    color: var(--ink); background: transparent;
+    border: 2px solid var(--ink); padding: 13px 32px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { background: var(--ink); color: var(--paper); }
+
+  .btn-red {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 13px; letter-spacing: 2px;
+    color: var(--paper); background: var(--accent);
+    border: 2px solid var(--accent); padding: 13px 32px; cursor: pointer;
+    transition: all 0.2s; text-decoration: none; display: inline-block;
+  }
+  .btn-red:hover { background: #a93226; border-color: #a93226; }
+
+  .footer-note {
+    font-size: 11px; color: var(--muted); text-align: center;
+    padding: 20px 0 40px; border-top: 1px solid var(--border);
+    line-height: 1.9; margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: INTRO -->
+<div class="page active" id="page-intro">
+  <div class="container">
+    <div class="hero">
+      <span class="hero-label">主題學習 × Back to Basics</span>
+      <h1>20道題，測出你的工作 MBTI</h1>
+      <p class="hero-sub">Work Personality Assessment</p>
+      <div class="tips-box">
+        <p>16 型人格沒有標準答案、優劣之分，填答時不應抱持面對考題的心態。</p>
+        <p>不要設想公司主管或人資希望看到什麼樣的答案，可以回想學生時代的自己，在沒有社會角色壓力的狀態下，你最真覺、不費力的偏好是什麼。</p>
+        <p>請憑直覺快速填答，不要過度糾結與思考。</p>
+      </div>
+      <button class="btn-primary" onclick="startQuiz()">開始測驗 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: QUIZ -->
+<div class="page" id="page-quiz">
+  <div class="progress-wrap">
+    <div class="progress-inner">
+      <span class="progress-text">已完成</span>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <span class="progress-pct" id="progress-pct">0%</span>
+    </div>
+  </div>
+  <div class="container">
+    <p class="section-label" style="margin-top:0;border-top:none;padding-top:0">第一部分 PART I — Q01–10</p>
+    <div id="q-block-1"></div>
+    <p class="section-label">第二部分 PART II — Q11–20</p>
+    <div id="q-block-2"></div>
+    <div class="submit-section">
+      <p class="submit-warning" id="submit-warning"></p>
+      <button class="btn-primary" onclick="submitQuiz()">查看我的 MBTI →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: RESULT -->
+<div class="page" id="page-result">
+  <div class="container">
+    <div class="result-hero">
+      <span class="result-eyebrow">你的工作人格類型</span>
+      <div class="result-type-wrap">
+        <span class="result-type-shadow" id="r-shadow"></span>
+        <span class="result-type-main"  id="r-type"></span>
+      </div>
+      <div class="result-name" id="r-name"></div>
+    </div>
+
+    <div class="score-grid">
+      <div class="score-card ei">
+        <div class="score-card-title">外向 E ／ 內向 I</div>
+        <div class="score-row">
+          <span class="score-ltr" id="le">E</span>
+          <div class="bar-bg"><div class="bar-fill" id="bar-e"></div></div>
+          <span class="score-ltr" id="li">I</span>
+        </div>
+        <div class="score-count" id="cnt-ei"></div>
+      </div>
+      <div class="score-card sn">
+        <div class="score-card-title">實感 S ／ 直覺 N</div>
+        <div class="score-row">
+          <span class="score-ltr" id="ls">S</span>
+          <div class="bar-bg"><div class="bar-fill" id="bar-s"></div></div>
+          <span class="score-ltr" id="ln">N</span>
+        </div>
+        <div class="score-count" id="cnt-sn"></div>
+      </div>
+      <div class="score-card tf">
+        <div class="score-card-title">思考 T ／ 情感 F</div>
+        <div class="score-row">
+          <span class="score-ltr" id="lt">T</span>
+          <div class="bar-bg"><div class="bar-fill" id="bar-t"></div></div>
+          <span class="score-ltr" id="lf">F</span>
+        </div>
+        <div class="score-count" id="cnt-tf"></div>
+      </div>
+      <div class="score-card jp">
+        <div class="score-card-title">判斷 J ／ 認知 P</div>
+        <div class="score-row">
+          <span class="score-ltr" id="lj">J</span>
+          <div class="bar-bg"><div class="bar-fill" id="bar-j"></div></div>
+          <span class="score-ltr" id="lp">P</span>
+        </div>
+        <div class="score-count" id="cnt-jp"></div>
+      </div>
+    </div>
+
+    <div class="desc-card">
+      <h3 id="r-desc-title"></h3>
+      <p id="r-desc-text"></p>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-outline" onclick="resetQuiz()">重新測驗</button>
+      <a class="btn-red" href="https://bnext.surveycake.biz/s/omG7K?utm_source=web_mt&utm_medium=home_selection" target="_blank">深入了解你的 MBTI →</a>
+    </div>
+
+    <div class="footer-note">
+      備註：此結果僅供參考，《經理人》模擬官方測驗題型。<br>
+      MBTI 官方測驗需要付費，並有認證專案一對一解析或詳盡報告。
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {id:1, g:'EI', q:'面對跨部門的協作需求時，你通常會：', a:'敲定時間開個簡短會議，透過口頭溝通與討論來對齊目標。', b:'先打好完整的企畫或訊息，再傳送給對方確認。'},
+  {id:2, g:'TF', q:'在團隊討論中，如果你的意見跟大眾不同，你通常會：', a:'堅持立場，直到有人能提出更有力的邏輯或證據說服我。', b:'評估現場氣氛，如果堅持會傷感情，可能會先保留意見。'},
+  {id:3, g:'JP', q:'如果今天的工作計畫臨時取消，多出了 1 小時的空檔，你會：', a:'立刻尋找下一件待辦事項，確保時間被有效地組織與利用。', b:'隨性處理一些感興趣的小事，享受這種自由感。'},
+  {id:4, g:'SN', q:'學習一個新工作或新技能，你比較喜歡：', a:'跟著步驟一步步操作，從實作中學習。', b:'先了解整體邏輯架構，並嘗試發掘不同的用法。'},
+  {id:5, g:'EI', q:'臨時被主管拉進一個完全沒準備的討論，你表現最自然的方式是：', a:'邊聽邊發言，透過對話來激發自己的觀點。', b:'先記錄大家的重點，等腦袋消化完後再簡短表達。'},
+  {id:6, g:'SN', q:'當老闆交辦一個從未做過的新專案時，你首先會關注：', a:'過去是否有類似案例或相關 SOP 可以參考。', b:'這個專案背後的長期意義，以及它能帶來的各種可能性。'},
+  {id:7, g:'JP', q:'面對周末突如其來的加班通知，你覺得最困擾的地方是：', a:'已經規畫好的私人行程被硬生生打亂，整體的掌控感消失了。', b:'雖然可以配合，但覺得毫無預警的變動讓工作變得很沉重。'},
+  {id:8, g:'EI', q:'面對一整天連續、密集的會議，你的體感通常是：', a:'覺得大腦轉動得很快，甚至會因此感到更有精神。', b:'即使會議內容順利，結束後仍會感到疲憊。'},
+  {id:9, g:'TF', q:'當團隊中有同事因為價值觀不同而產生僵局時，你通常會：', a:'站在中立角度，根據公司的目標與邏輯分析誰的方案更有效率。', b:'關注雙方的互動情緒，試著尋找能讓大家在和諧氣氛下共事的折衷點。'},
+  {id:10,g:'SN', q:'對於辦公室的「潛規則」，你的態度是：', a:'這是職場現實的一部分，我會觀察現狀並務實應對。', b:'我更在乎這背後的權力架構與各種可能造成的長期影響。'},
+  {id:11,g:'EI', q:'剛換到一個新的環境工作，你通常會如何認識新同事？', a:'趁午餐或茶水間碰面時，主動開啟話題自我介紹。', b:'先觀察大家的互動與職責，等待合適的公事契機再交談。'},
+  {id:12,g:'JP', q:'你傾向如何管理你的待辦清單？', a:'看到清單被劃掉才安心。', b:'保持清單的開放性，隨時調整優先順序。'},
+  {id:13,g:'TF', q:'看到同事在工作上出了明顯的低級錯誤，你的第一直覺反應是：', a:'思考這個錯誤會對專案造成什麼後果，以及如何修正。', b:'擔心同事現在的心情，以及他是否正承受著巨大的壓力。'},
+  {id:14,g:'TF', q:'當主管對你的表現給予負面回饋時，你內心最先產生的念頭是：', a:'「他說的內容合乎邏輯嗎？具體的事實依據是什麼？」', b:'「他對我的印象變差了嗎？這會影響我們之後的合作關係嗎？」'},
+  {id:15,g:'EI', q:'在一個忙碌的下午，主管突然走過來問：「大家現在有空聊一下新想法嗎？」你的內心反應是：', a:'覺得正好可以換個節奏工作，很樂意參與討論並拋出想法。', b:'感到被打斷，希望能趕快結束討論、回到原本的工作。'},
+  {id:16,g:'SN', q:'在會議中討論問題時，你最不能忍受的是：', a:'討論太過空泛、沒有重點，卻不談具體如何解決問題。', b:'太糾結於細節，卻忽略了整件事的大方向。'},
+  {id:17,g:'JP', q:'當你正在進行一項工作，主管突然衝進來說有另一件急事，你的反應是：', a:'感到被打斷的焦躁，會想趕快把手邊的事做完再換。', b:'覺得沒關係，隨時切換工作節奏對我來說並不困難。'},
+  {id:18,g:'SN', q:'同事通常會用哪種形容詞形容你？', a:'「你做事非常穩重，細節都注意到了。」', b:'「你很有遠見和創意，常有令人驚喜的想法。」'},
+  {id:19,g:'TF', q:'當你必須拒絕一個合作夥伴的不合理要求時，你傾向：', a:'清楚列出合約條款與邏輯理由，專業且客觀地說明原因。', b:'委婉地表達困難，並強調雙方關係的重要性，尋求諒解。'},
+  {id:20,g:'JP', q:'如果可以選擇自己的工作任務，你會比較喜歡哪種性質的工作任務？', a:'目標明確、流程清晰，可以按計畫有條理地推進到結束。', b:'充滿變數與新鮮感，可以隨時根據新狀況調整做法。'}
+];
+
+const desc = {
+  INTJ:{n:'策略家',t:'獨立、有遠見、善於規劃。你傾向用邏輯與長遠視角思考問題，對低效率與不合理的系統感到不耐。工作上你是自驅力強的問題解決者，偏好有清晰目標與自主空間的環境。'},
+  INTP:{n:'邏輯學家',t:'好奇、分析、重視概念的一致性。你享受探索複雜的理論問題，傾向獨立思考而非從眾。在工作中，你是創新的思想者，但可能需要加強執行與溝通的部分。'},
+  ENTJ:{n:'指揮官',t:'果斷、有領導力、目標導向。你天生善於組織人員與資源來實現目標，在混亂中仍能保持清晰的方向感。你的工作風格高效、直接，適合承擔高責任感的領導角色。'},
+  ENTP:{n:'辯論家',t:'機智、充滿創意、喜歡挑戰既有觀念。你享受思辨與腦力激盪，善於看見別人忽略的可能性。工作中你能帶來創新視角，但需注意將想法落實執行。'},
+  INFJ:{n:'提倡者',t:'有洞察力、富同理心、堅持理想。你對人與意義有深刻的關注，工作中兼顧邏輯與情感，是少見的理想主義實踐者。你傾向深度工作，而非表面的社交。'},
+  INFP:{n:'調停者',t:'富創意、真誠、重視個人價值觀。你在工作中尋求意義與連結，善於理解他人情感。你可能在高度官僚或衝突的環境中感到壓力，適合有創作空間或幫助他人的工作。'},
+  ENFJ:{n:'主人公',t:'有魅力、善於鼓舞他人、重視和諧。你天生擅長建立關係、凝聚團隊，能感受他人需求並給予支持。工作中你是天然的協調者與領導者，但要注意不要過度消耗自己。'},
+  ENFP:{n:'競選者',t:'熱情、充滿想像力、人際關係豐富。你善於激發他人的潛能，對新想法充滿熱忱。工作中你是點子王與關係建立者，但可能需要培養更強的執行力與聚焦力。'},
+  ISTJ:{n:'物流師',t:'可靠、負責、重視秩序與規範。你工作認真踏實，重視細節與一致性，是組織中穩定的骨幹。你在有明確規則與期望的環境中表現最佳，也是別人可以依賴的合作夥伴。'},
+  ISFJ:{n:'守護者',t:'溫暖、細心、全力支持他人。你對身邊的人充滿關懷，工作中默默付出、注重細節。你珍視穩定的人際關係，適合在有歸屬感、可以幫助他人的職場環境中發揮。'},
+  ESTJ:{n:'總經理',t:'務實、有組織力、善於管理。你擅長建立秩序、制定流程，並確保事情按計畫推進。工作中你直接、高效，是出色的執行者與管理者，但可能需要多理解不同風格的合作方式。'},
+  ESFJ:{n:'執政官',t:'友善、熱心、重視團隊和諧。你在工作中以關懷與服務他人為動力，善於照顧到每個人的感受。你在有歸屬感、能直接幫助他人的環境中最能發揮，但要學習為自己設立界線。'},
+  ISTP:{n:'鑒賞家',t:'冷靜、靈活、善於解決實際問題。你觀察敏銳、動手能力強，在危機中能保持冷靜並快速行動。工作中你重視效率與自主，但可能需要更多主動溝通來讓夥伴了解你的想法。'},
+  ISFP:{n:'探險家',t:'溫柔、充滿藝術感、活在當下。你對美感與個人價值觀有強烈的感知，工作中需要有表達自我的空間。你傾向和諧的人際環境，在有創意自由且不過度競爭的職場中最為舒適。'},
+  ESTP:{n:'企業家',t:'大膽、機智、善於隨機應變。你享受快節奏與挑戰，能快速讀取現場並採取行動。工作中你是充滿活力的行動派，在需要即時反應與談判的環境中如魚得水。'},
+  ESFP:{n:'表演者',t:'熱情、善於社交、重視當下的體驗。你在工作中帶來活力與歡樂，善於讓每個人感到被重視。你適合需要大量人際互動的工作環境，在有即時反饋的工作中表現最出色。'}
+};
+
+// Build question cards
+function buildQuiz() {
+  ['q-block-1','q-block-2'].forEach(id => document.getElementById(id).innerHTML = '');
+  questions.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = 'qcard-' + q.id;
+    card.innerHTML =
+      '<div class="question-header">' +
+        '<span class="question-num">Q' + String(q.id).padStart(2,'0') + '</span>' +
+        '<span class="question-text">' + q.q + '</span>' +
+      '</div>' +
+      '<div class="options">' +
+        '<label class="option-label" id="lbl-' + q.id + '-a">' +
+          '<input type="radio" name="q' + q.id + '" value="a" onchange="onAnswer(' + q.id + ')">' +
+          '<span class="option-marker"></span>' +
+          '<span class="option-badge">a</span>' +
+          '<span class="option-text">' + q.a + '</span>' +
+        '</label>' +
+        '<div class="option-divider"></div>' +
+        '<label class="option-label" id="lbl-' + q.id + '-b">' +
+          '<input type="radio" name="q' + q.id + '" value="b" onchange="onAnswer(' + q.id + ')">' +
+          '<span class="option-marker"></span>' +
+          '<span class="option-badge">b</span>' +
+          '<span class="option-text">' + q.b + '</span>' +
+        '</label>' +
+      '</div>';
+    document.getElementById(q.id <= 10 ? 'q-block-1' : 'q-block-2').appendChild(card);
+  });
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function startQuiz() { showPage('page-quiz'); }
+
+function onAnswer(qid) {
+  const val = document.querySelector('input[name="q' + qid + '"]:checked').value;
+  document.getElementById('qcard-' + qid).classList.add('answered');
+  ['a','b'].forEach(v => {
+    document.getElementById('lbl-' + qid + '-' + v).classList.toggle('selected', val === v);
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  let done = 0;
+  questions.forEach(q => { if (document.querySelector('input[name="q' + q.id + '"]:checked')) done++; });
+  const pct = Math.round(done / 20 * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+function submitQuiz() {
+  const missing = questions.filter(q => !document.querySelector('input[name="q' + q.id + '"]:checked')).map(q => q.id);
+  if (missing.length) {
+    const w = document.getElementById('submit-warning');
+    w.textContent = '尚未作答：第 ' + missing.join('、') + ' 題，請完成所有題目再提交。';
+    w.classList.add('visible');
+    document.getElementById('qcard-' + missing[0]).scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  const g = {EI:{a:0,b:0}, SN:{a:0,b:0}, TF:{a:0,b:0}, JP:{a:0,b:0}};
+  questions.forEach(q => {
+    g[q.g][document.querySelector('input[name="q' + q.id + '"]:checked').value]++;
+  });
+
+  const E=g.EI.a, I=g.EI.b, S=g.SN.a, N=g.SN.b, T=g.TF.a, F=g.TF.b, J=g.JP.a, P=g.JP.b;
+  const type = (E>=I?'E':'I') + (S>=N?'S':'N') + (T>=F?'T':'F') + (J>=P?'J':'P');
+  const d = desc[type] || {n:'獨特類型', t:'你擁有獨特的人格組合。'};
+
+  // Fill result page
+  document.getElementById('r-type').textContent   = type;
+  document.getElementById('r-shadow').textContent = type;
+  document.getElementById('r-name').textContent   = d.n;
+  document.getElementById('r-desc-title').textContent = type + ' — ' + d.n;
+  document.getElementById('r-desc-text').textContent  = d.t;
+
+  // Score bars — reset width first so animation retriggers
+  function setScore(barId, leftId, rightId, countId, leftVal, rightVal, leftLabel, rightLabel) {
+    const total = leftVal + rightVal;
+    const leftWins = leftVal >= rightVal;
+    document.getElementById(barId).style.width = '0%';
+    document.getElementById(leftId).className  = 'score-ltr ' + (leftWins  ? 'win' : 'lose');
+    document.getElementById(rightId).className = 'score-ltr ' + (!leftWins ? 'win' : 'lose');
+    document.getElementById(countId).textContent = leftLabel + ': ' + leftVal + ' 題 ／ ' + rightLabel + ': ' + rightVal + ' 題';
+    // Double rAF to ensure DOM has updated before triggering CSS transition
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        document.getElementById(barId).style.width = (leftVal / total * 100) + '%';
+      });
+    });
+  }
+
+  setScore('bar-e','le','li','cnt-ei', E, I, 'E','I');
+  setScore('bar-s','ls','ln','cnt-sn', S, N, 'S','N');
+  setScore('bar-t','lt','lf','cnt-tf', T, F, 'T','F');
+  setScore('bar-j','lj','lp','cnt-jp', J, P, 'J','P');
+
+  showPage('page-result');
+}
+
+function resetQuiz() {
+  questions.forEach(q => {
+    document.querySelectorAll('input[name="q' + q.id + '"]').forEach(r => r.checked = false);
+    document.getElementById('qcard-' + q.id).classList.remove('answered');
+    ['a','b'].forEach(v => document.getElementById('lbl-' + q.id + '-' + v).classList.remove('selected'));
+  });
+  document.getElementById('progress-fill').style.width = '0%';
+  document.getElementById('progress-pct').textContent = '0%';
+  document.getElementById('submit-warning').classList.remove('visible');
+  showPage('page-intro');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
