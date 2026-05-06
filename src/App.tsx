@@ -7,6 +7,7 @@ import Instructor from '@/components/Instructor'
 import Stats from '@/components/Stats'
 import Reviews from '@/components/Reviews'
 import CtaFooter from '@/components/CtaFooter'
+import ImageGenerator from '@/components/ImageGenerator'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <PartnersBar />
       <PainPoints />
       <FeaturesChess />
+      <ImageGenerator />
       <Instructor />
       <Stats />
       <Reviews />
